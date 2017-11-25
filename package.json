@@ -22,5 +22,8 @@
     "chatbot": "^1.2.3"
   },
   "author": "Johnny Mast",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "rivescript": "^1.17.2"
+  }
 }
