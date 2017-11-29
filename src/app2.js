@@ -1,5 +1,6 @@
-let bot = new Chatbot();
+import Chatbot from "Chatbot";
 
+let bot = new Chatbot();
 
 bot.learn([
     "brain/begin.rive",
@@ -10,6 +11,9 @@ bot.learn([
     "brain/rpg.rive",
     "brain/javascript.rive"
 ]);
+
+console.debug('learned the bot');
+
 bot.setBotName('robin');
 bot.on('on.answer', function(reply) {
     console.debug('reply == '+reply);

@@ -1,66 +1,54 @@
+import RiveScript from "rivescript";
+
 class Chatbot {
     constructor() {
         this.name = 'bot';
-        this.events = new Array();
+        this.events = [];
         this.events['on.answer'] = {};
+        this.debugMode = false;
 
-        var debugMode = false;
-        // Create our RiveScript interpreter.
         this.rs = new RiveScript({
-            debug: debugMode,
+            debug: this.debugMode,
             onDebug: this.onDebug
         });
-
-      //  this.ts.setHandler("javascript", null);
     }
 
     onDebug(info) {
-        console.log(info);
+        console.debug(info);
     }
 
     setBotName(name) {
         this.name = name;
     }
 
-    learn(script) {
-        var self = this;
-        if (typeof script == 'object') {
-            this.rs.loadFile([
-                "brain/begin.rive",
-                "brain/admin.rive",
-                "brain/clients.rive",
-                "brain/eliza.rive",
-                "brain/myself.rive",
-                "brain/rpg.rive",
-                "brain/javascript.rive"
-            ], function () {
+    learn(files) {
+        let self = this;
+        if (typeof files === 'object') {
+            this.rs.loadFile(files, function () {
                 self.rs.setVariable('name', self.name);
                 self.rs.sortReplies();
-            }, this.on_load_error);
+            }, function (err, status) {
+                // on error
+                console.debug('Error: ' + err + ' Status: ' + status); // + ' LoadCount: '+loadCount)
+            });
         }
     }
 
-    on_load_error() {
-        console.log('load error');
-    }
-
     feed(text = '') {
-        var reply = this.rs.reply("soandso", text);
-        reply = reply.replace(/\n/g, "<br>");
+        let reply = this.rs.reply("soandso", text);
         this.broadcast('on.answer', reply);
-
-        //   console.log(reply);
     }
 
     on(event, callable) {
-        if (typeof callable == 'function') {
+        if (typeof callable === 'function') {
             this.events[event] = callable;
         }
     }
 
     broadcast(event, info) {
-        if (typeof this.events[event] == 'function') {
+        if (typeof this.events[event] === 'function') {
             this.events[event](info);
         }
     }
 }
+module.exports = Chatbot;

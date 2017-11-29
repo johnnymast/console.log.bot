@@ -43,6 +43,8 @@ module.exports = {
             path.resolve('./src'),
             path.resolve('./node_modules'),
         ]
+    },
+    node: {
+        fs: 'empty',
     }
-
 };
